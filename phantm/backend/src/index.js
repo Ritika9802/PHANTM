@@ -11,6 +11,7 @@ import { reportsRouter } from "./routers/reports.js";
 import { hunterRouter } from "./routers/hunter.js";
 import { wsManager } from "./services/wsManager.js";
 import { logger } from "./utils/logger.js";
+import { getLlmModelLabel } from "./utils/model.js";
 
 dotenv.config();
 
@@ -27,7 +28,7 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 // Health
-app.get("/api/health", (_, res) => res.json({ status: "ok", version: "2.0.0", model: "llama-3.3-70b-versatile" }));
+app.get("/api/health", (_, res) => res.json({ status: "ok", version: "2.0.0", model: getLlmModelLabel() }));
 
 // Routers
 app.use("/api/scan", scanRouter);

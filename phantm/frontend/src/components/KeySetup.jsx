@@ -17,7 +17,7 @@ export default function KeySetup() {
       <div className="key-modal">
         <div className="key-icon">⬡</div>
         <div className="key-title">PHANTM REQUIRES A FREE GROQ API KEY</div>
-        <div className="key-sub">Powered by <span className="amber">Llama 3.3 70B</span> via Groq — 100% free, no credit card</div>
+        <div className="key-sub">Powered by <span className="amber">Llama 3 70B</span> via Groq — 100% free, no credit card</div>
         <div className="key-steps">
           <div className="key-step"><span className="step-num">01</span><span>Go to <a href="https://console.groq.com" target="_blank" rel="noreferrer" className="link">console.groq.com</a></span></div>
           <div className="key-step"><span className="step-num">02</span><span>Sign up free → API Keys → Create Key</span></div>

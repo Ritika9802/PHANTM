@@ -1,0 +1,52 @@
+{
+  "scans": [
+    {
+      "id": "705ff386-0a99-45ee-ab88-d466ae40b885",
+      "target": "127.0.0.1",
+      "status": "complete",
+      "scan_type": "hunt:standard",
+      "created_at": "2026-06-02T06:13:28.243Z",
+      "updated_at": "2026-06-02T06:13:28.358Z",
+      "findings_count": 0,
+      "risk_score": 0,
+      "summary": "{\"mode\":\"standard\",\"total\":1,\"reachable\":0,\"unreachable\":1,\"totalOpenPorts\":0,\"targets\":[{\"target\":\"127.0.0.1\",\"reachable\":false,\"openPorts\":[],\"error\":\"host unreachable\"}]}"
+    },
+    {
+      "id": "42bdc2ad-d905-4ceb-ba0a-b74bd12bfd90",
+      "target": "127.0.0.1",
+      "status": "complete",
+      "scan_type": "hunt:quick",
+      "created_at": "2026-06-02T06:16:28.881Z",
+      "updated_at": "2026-06-02T06:16:28.912Z",
+      "findings_count": 0,
+      "risk_score": 0,
+      "summary": "{\"mode\":\"quick\",\"total\":1,\"reachable\":0,\"unreachable\":1,\"totalOpenPorts\":0,\"targets\":[{\"target\":\"127.0.0.1\",\"reachable\":false,\"openPorts\":[],\"error\":\"host unreachable\"}]}"
+    },
+    {
+      "id": "59ca82ab-9409-4a4c-9f78-0fb9dcff33cf",
+      "target": "127.0.0.1",
+      "status": "complete",
+      "scan_type": "hunt:quick",
+      "created_at": "2026-06-02T06:17:49.217Z",
+      "updated_at": "2026-06-02T06:17:49.264Z",
+      "findings_count": 0,
+      "risk_score": 0,
+      "summary": "{\"mode\":\"quick\",\"total\":1,\"reachable\":0,\"unreachable\":1,\"totalOpenPorts\":0,\"targets\":[{\"target\":\"127.0.0.1\",\"reachable\":false,\"openPorts\":[],\"error\":\"host unreachable\"}]}"
+    },
+    {
+      "id": "d49bd567-6f98-4bdb-88c4-c2554567db12",
+      "target": "127.0.0.1",
+      "status": "complete",
+      "scan_type": "hunt:standard",
+      "created_at": "2026-06-02T06:28:32.254Z",
+      "updated_at": "2026-06-02T06:28:32.406Z",
+      "findings_count": 0,
+      "risk_score": 0,
+      "summary": "{\"mode\":\"standard\",\"total\":1,\"reachable\":0,\"unreachable\":1,\"totalOpenPorts\":0,\"targets\":[{\"target\":\"127.0.0.1\",\"reachable\":false,\"openPorts\":[],\"error\":\"host unreachable\"}]}"
+    }
+  ],
+  "findings": [],
+  "attack_chains": [],
+  "scan_logs": [],
+  "cve_cache": []
+}

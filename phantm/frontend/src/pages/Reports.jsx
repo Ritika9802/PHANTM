@@ -85,7 +85,7 @@ export default function Reports() {
           </div>
           {!selected && <div className="empty-state-inline muted">Select a scan from the left panel</div>}
           {selected && !report && !generating && <div className="empty-state-inline muted">Select format → Generate Report</div>}
-          {generating && <div className="generating-state"><div className="gen-icon pulse-icon">⬡</div><div className="muted">Llama 3.3 composing report from validated findings…</div></div>}
+          {generating && <div className="generating-state"><div className="gen-icon pulse-icon">⬡</div><div className="muted">Llama 3 composing report from validated findings…</div></div>}
           {report && <pre className="report-text mono">{report}</pre>}
         </div>
       </div>

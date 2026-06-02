@@ -1,7 +1,11 @@
 import fetch from "node-fetch";
+import { getGroqModel, getLlmProvider, getOllamaModel } from "../utils/model.js";
 
 const GROQ_API = "https://api.groq.com/openai/v1/chat/completions";
-const MODEL = "llama-3.3-70b-versatile";
+const OLLAMA_API = (process.env.OLLAMA_BASE_URL || "http://localhost:11434").replace(/\/$/, "") + "/api/chat";
+const GROQ_MODEL = getGroqModel();
+const OLLAMA_MODEL = getOllamaModel();
+const LLM_PROVIDER = getLlmProvider();
 
 const SYSTEM = `You are PHANTM — a senior penetration tester with 15+ years experience. You analyze pre-validated scan data and provide accurate security analysis.
 
@@ -23,7 +27,7 @@ export class LLMAgent {
   }
 
   async run() {
-    this.log("LLM", "Sending validated findings to Llama 3.3 70B…", "info");
+    this.log("LLM", `Sending validated findings via ${LLM_PROVIDER === "ollama" ? `Ollama (${OLLAMA_MODEL})` : `Groq (${GROQ_MODEL})`}…`, "info");
     this.log("LLM", "LLM reasoning on evidence only — no hallucination mode", "info");
 
     const { domain, findings, attackChains, technologies, reconData } = this.context;
@@ -58,39 +62,96 @@ Return ONLY valid JSON (no markdown):
 }`;
 
     try {
-      const res = await fetch(GROQ_API, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${this.apiKey}` },
-        body: JSON.stringify({ model: MODEL, max_tokens: 1500, messages: [
-          { role: "system", content: SYSTEM },
-          { role: "user", content: prompt }
-        ]}),
-      });
-
-      if (!res.ok) {
-        this.log("LLM", `Groq API error ${res.status}`, "error");
-        return null;
+      const result = LLM_PROVIDER === "ollama"
+        ? await this.runOllama(prompt)
+        : await this.runGroq(prompt);
+      if (result) {
+        this.log("LLM", `Analysis complete — Risk: ${result.riskScore}/100 (${result.riskRating})`, "success");
+        return result;
       }
-
-      const data = await res.json();
-      const text = data.choices?.[0]?.message?.content || "{}";
-      const clean = text.replace(/```json|```/g, "").trim();
-      const result = JSON.parse(clean);
-      this.log("LLM", `Analysis complete — Risk: ${result.riskScore}/100 (${result.riskRating})`, "success");
-      return result;
+      return null;
     } catch (err) {
       this.log("LLM", `LLM reasoning failed: ${err.message} — using deterministic summary`, "warn");
       return null;
     }
   }
+
+  async runGroq(prompt) {
+    const res = await fetch(GROQ_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${this.apiKey}` },
+      body: JSON.stringify({
+        model: GROQ_MODEL,
+        max_tokens: 1500,
+        messages: [
+          { role: "system", content: SYSTEM },
+          { role: "user", content: prompt },
+        ],
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Groq API error ${res.status}`);
+    }
+
+    const data = await res.json();
+    return this.parseResult(data.choices?.[0]?.message?.content || "{}");
+  }
+
+  async runOllama(prompt) {
+    const res = await fetch(OLLAMA_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: OLLAMA_MODEL,
+        stream: false,
+        format: "json",
+        messages: [
+          { role: "system", content: SYSTEM },
+          { role: "user", content: prompt },
+        ],
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Ollama API error ${res.status}`);
+    }
+
+    const data = await res.json();
+    const content = data.message?.content || data.response || "{}";
+    return this.parseResult(content);
+  }
+
+  parseResult(text) {
+    const clean = String(text).replace(/```json|```/g, "").trim();
+    return JSON.parse(clean || "{}");
+  }
 }
 
 export async function groqChat(messages, systemPrompt, apiKey) {
+  if (LLM_PROVIDER === "ollama") {
+    const res = await fetch(OLLAMA_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: OLLAMA_MODEL,
+        stream: false,
+        messages: [
+          { role: "system", content: systemPrompt },
+          ...messages,
+        ],
+      }),
+    });
+    if (!res.ok) throw new Error(`Ollama API error ${res.status}`);
+    const data = await res.json();
+    return data.message?.content || data.response || "";
+  }
+
   const res = await fetch(GROQ_API, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
     body: JSON.stringify({
-      model: MODEL, max_tokens: 1500,
+      model: GROQ_MODEL, max_tokens: 1500,
       messages: [
         { role: "system", content: systemPrompt },
         ...messages

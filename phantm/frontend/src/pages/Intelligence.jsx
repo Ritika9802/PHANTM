@@ -30,7 +30,7 @@ function Bubble({ msg }) {
 
 export default function Intelligence({ activeScanId }) {
   const { apiKey } = useKey();
-  const [messages, setMessages] = useState([{ role: "assistant", content: "PHANTM AI online — Llama 3.3 70B.\n\nRun a scan first for context-aware analysis, or ask about penetration testing, CVEs, or security methodology.", ts: new Date().toLocaleTimeString() }]);
+  const [messages, setMessages] = useState([{ role: "assistant", content: "PHANTM AI online — Llama 3 70B.\n\nRun a scan first for context-aware analysis, or ask about penetration testing, CVEs, or security methodology.", ts: new Date().toLocaleTimeString() }]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [scanData, setScanData] = useState(null);
@@ -74,7 +74,7 @@ export default function Intelligence({ activeScanId }) {
   return (
     <div className="page intel-page">
       <div className="page-header">
-        <div><h1 className="page-title">AI ANALYST</h1><p className="page-sub">Context-aware reasoning · Llama 3.3 70B · evidence-based only</p></div>
+        <div><h1 className="page-title">AI ANALYST</h1><p className="page-sub">Context-aware reasoning · Llama 3 70B · evidence-based only</p></div>
         {scanData && <div className="context-badge"><span className="ctx-dot" />SCAN LOADED · {scanData.target}</div>}
       </div>
       <div className="intel-layout">

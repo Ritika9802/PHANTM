@@ -3,7 +3,7 @@ import { dbHelpers } from "../db/sqlite.js";
 import { wsManager } from "./wsManager.js";
 import { ReconAgent } from "../agents/reconAgent.js";
 import { FingerprintAgent } from "../agents/fingerprintAgent.js";
-import { CVEAgent } from "../agents/cveAgent.js";
+import { CVEAgent } from "../agents/cVEAgent.js";
 import { ValidatorAgent } from "../agents/validatorAgent.js";
 import { SeverityAgent } from "../agents/severityAgent.js";
 import { ChainAgent } from "../agents/chainAgent.js";

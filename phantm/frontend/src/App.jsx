@@ -38,7 +38,7 @@ function Layout() {
         </div>
         <div className="sidebar-status">
           <span className="status-dot pulse" />
-          LLAMA 3.3 · ONLINE
+          LLAMA 3 · ONLINE
         </div>
         <nav className="sidebar-nav">
           {NAV.map(n => (
@@ -55,7 +55,7 @@ function Layout() {
           </div>
         )}
         <div className="sidebar-footer">
-          <div className="footer-line">v2.0.0 · Llama 3.3 70B</div>
+          <div className="footer-line">v2.0.0 · Llama 3 70B</div>
           <button className="key-reset-btn" onClick={() => saveKey("")}>⟳ Reset Key</button>
         </div>
       </aside>

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { scanAPI } from "../lib/api";
 import { useKey } from "../lib/KeyContext";
 import { useScanWS } from "../hooks/useScanWS";
@@ -12,7 +12,7 @@ const STAGES = [
   { id: "severity", label: "CVSS Calibration", icon: "▲", desc: "Deterministic CVSS v3.1 scoring" },
   { id: "chains", label: "Attack Chains", icon: "⛓", desc: "Multi-finding correlation" },
   { id: "mitre", label: "MITRE Mapping", icon: "★", desc: "ATT&CK TTP tagging" },
-  { id: "llm", label: "LLM Reasoning", icon: "⬡", desc: "Llama 3.3 70B — evidence-based only" },
+  { id: "llm", label: "LLM Reasoning", icon: "⬡", desc: "Llama 3 70B — evidence-based only" },
 ];
 
 export default function Scanner({ onScanStart }) {
@@ -21,6 +21,7 @@ export default function Scanner({ onScanStart }) {
   const [scanType, setScanType] = useState("standard");
   const [scanId, setScanId] = useState(null);
   const [scanData, setScanData] = useState(null);
+  const [loadingResults, setLoadingResults] = useState(false);
   const [activeTab, setActiveTab] = useState("findings");
   const [backendDown, setBackendDown] = useState(false);
   const logsRef = useRef(null);
@@ -42,14 +43,20 @@ export default function Scanner({ onScanStart }) {
   };
 
   const loadResults = async () => {
-    if (!scanId) return;
+    if (!scanId || loadingResults) return;
+    setLoadingResults(true);
     try {
       const res = await scanAPI.get(scanId);
       setScanData(res.data);
     } catch {}
+    finally {
+      setLoadingResults(false);
+    }
   };
 
-  if (complete && !scanData) loadResults();
+  useEffect(() => {
+    if (complete && !scanData) loadResults();
+  }, [complete, scanData, scanId]);
 
   const allFindings = scanData?.findings || wsFindings;
   const chains = scanData?.attackChains || [];
@@ -58,8 +65,13 @@ export default function Scanner({ onScanStart }) {
   return (
     <div className="page">
       <div className="page-header">
-        <div><h1 className="page-title">SCAN ENGINE</h1><p className="page-sub">8-stage deterministic pipeline · CVE-validated · Llama 3.3 70B</p></div>
-        <div className="model-badge">⬡ LLAMA 3.3 · 70B · GROQ</div>
+        <div><h1 className="page-title">SCAN ENGINE</h1><p className="page-sub">8-stage deterministic pipeline · CVE-validated · Llama 3 70B</p></div>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
+          {summary?.scanMode === "host" && (
+            <div className="model-badge">{String(summary.classification || "host").toUpperCase()} · HOST SCAN</div>
+          )}
+          <div className="model-badge">⬡ LLAMA 3 · 70B · GROQ</div>
+        </div>
       </div>
 
       {backendDown && (
