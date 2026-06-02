@@ -1,0 +1,13 @@
+{
+  "name": "phantm-vapt",
+  "version": "2.0.0",
+  "description": "PHANTM — AI-Powered VAPT Framework",
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev": "start cmd /k npm run dev:backend && start cmd /k npm run dev:frontend",
+    "setup": "npm run install:all"
+  },
+  "private": true
+}

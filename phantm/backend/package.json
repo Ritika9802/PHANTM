@@ -1,0 +1,30 @@
+{
+  "name": "phantm-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "worker": "node src/workers/scanWorker.js"
+  },
+  "dependencies": {
+    "bull": "^4.12.2",
+    "cors": "^2.8.6",
+    "csv-parse": "^5.5.3",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.2",
+    "express-rate-limit": "^7.5.1",
+    "helmet": "^7.2.0",
+    "js-yaml": "^4.1.0",
+    "lowdb": "^7.0.1",
+    "multer": "^1.4.5-lts.1",
+    "node-fetch": "^3.3.2",
+    "redis": "^4.6.13",
+    "uuid": "^9.0.1",
+    "winston": "^3.19.0",
+    "ws": "^8.20.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}
